@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Window name="Game" width="800" height="600">
+	<Gui>
+		<ActionBar text="" width="wrap_screen" height="50">
+			<SpriteButton width="45" height="45">
+				<Image>"blue_circle.png"</Image>
+				<HoverText>"Add object to scene"</HoverText>
+			</SpriteButton>
+		</ActionBar>
+	</Gui>
+	<Scene>
+		<CameraObject type="perspective" res_width="800" res_height="600">
+			</Camera>
+		<MeshObject>
+			<MeshFile>"default_cube.fbx"</MeshFile>
+			<MatColor>"1.0, 1.0, 1.0, 1.0"</MatColor>
+		</MeshObject>
+	</Scene>
+</Window>
