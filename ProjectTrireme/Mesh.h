@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRIREME_MESH_H
+#define TRIREME_MESH_H
 
 #include "constdef.h"
 #include "glm\glm.hpp"
@@ -35,15 +36,15 @@ namespace Trireme
 
 		Mesh();
 
-		void bind();
+		void bind()const;
 
 		void fill(std::vector<glm::vec3> vertices, std::vector<unsigned int> indices);
 
-		void addUVMap(std::vector<glm::vec3> uvs);
+		void addUVMap(std::vector<glm::vec2> uvs);
 
 		void addUVMap(UVMap uvMap);
 
-		void draw();
+		void draw()const;
 
 		virtual ~Mesh();
 	private:
@@ -56,5 +57,7 @@ namespace Trireme
 		std::vector<UVMap> uvMaps;
 	};
 }
+
+#endif
 
 

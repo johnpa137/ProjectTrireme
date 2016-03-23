@@ -50,7 +50,7 @@ void ShaderGUI::compile()
 	linkAndValidateShader(handle);
 }
 
-void ShaderGUI::bind()
+void ShaderGUI::bind()const
 {
 	glUseProgram(handle);
 }
@@ -109,7 +109,7 @@ void ShaderFont::compile()
 	uniforms[TEXT_COLOR] = glGetUniformLocation(handle, "text_color");
 }
 
-void ShaderFont::bind()
+void ShaderFont::bind()const
 {
 	glUseProgram(handle);
 }
@@ -170,7 +170,7 @@ void ShaderSimple::compile()
 	uniforms[OBJECTPOSITION] = glGetUniformLocation(handle, "object_pos");
 }
 
-void ShaderSimple::bind()
+void ShaderSimple::bind()const
 {
 	glUseProgram(handle);
 }

@@ -11,7 +11,7 @@ Mesh::Mesh()
 	vertexCount = 0;
 }
 
-void Mesh::bind()
+void Mesh::bind()const
 {
 	glBindVertexArray(vao);
 }
@@ -45,7 +45,7 @@ void Mesh::fill(std::vector<vec3> vertices, std::vector<unsigned int> indices)
 	indexCount = indices.size();
 }
 
-void Mesh::draw()
+void Mesh::draw()const
 {
 	glBindVertexArray(vao);
 

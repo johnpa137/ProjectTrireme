@@ -1,7 +1,8 @@
 //-------------------------------------------------------------------------------------------------
-#pragma once
+// #pragma warning (disable : 4996)
 
-#pragma warning (disable : 4996)
+#ifndef TRIREME_TEXTURE_H
+#define TRIREME_TEXTURE_H
 
 #include "SDL2\SDL.h"
 #include "SDL2\SDL_image.h"
@@ -40,5 +41,7 @@ namespace Trireme
 		GLuint handle;
 	};
 }
+
+#endif
 	
 

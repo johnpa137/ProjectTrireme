@@ -1,7 +1,8 @@
 //-------------------------------------------------------------------------------------------------
-#pragma once
+// #pragma warning(disable:4996)
 
-#pragma warning(disable:4996)
+#ifndef TRIREME_DISPLAY_H
+#define TRIREME_DISPLAY_H
 
 #include "SDL2\SDL.h"
 #include "GL\glew.h"
@@ -32,7 +33,7 @@ namespace Trireme
 		void update();
 
 		// clears display
-		void clear()const;
+		void clear();
 
 		// object event handling
 		void input(SDL_Event& e);
@@ -72,3 +73,5 @@ namespace Trireme
 		ushort m_height;
 	};
 }
+
+#endif

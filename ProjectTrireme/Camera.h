@@ -1,5 +1,6 @@
 //-------------------------------------------------------------------------------------------------
-#pragma once
+#ifndef TRIREME_CAMERA_H
+#define TRIREME_CAMERA_H
 
 #include "constdef.h"
 #include "glm\glm.hpp"
@@ -52,3 +53,5 @@ namespace Trireme
 		glm::mat4 viewMatrix;
 	};
 }
+
+#endif

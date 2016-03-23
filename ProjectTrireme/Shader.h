@@ -1,4 +1,6 @@
-#pragma once
+#ifndef TRIREME_SHADER_H
+#define TRIREME_SHADER_H
+
 #include "constdef.h"
 #include "GL\glew.h"
 #define GLM_SWIZZLE
@@ -24,7 +26,7 @@ namespace Trireme
 		virtual void compile() {}
 
 		// sets this as the program openGL is currently using
-		virtual void bind() {}
+		virtual void bind()const {}
 
 		// destructor
 		virtual ~Shader() {}
@@ -88,7 +90,7 @@ namespace Trireme
 		void compile();
 
 		// sets this as the program openGL is currently using
-		void bind();
+		void bind()const;
 
 		// destructor
 		~ShaderGUI();
@@ -119,7 +121,7 @@ namespace Trireme
 
 		void compile();
 
-		void bind();
+		void bind()const;
 
 		~ShaderFont();
 
@@ -163,7 +165,7 @@ namespace Trireme
 		void compile();
 	
 		// sets this as the program openGL is currently using
-		void bind();
+		void bind()const;
 	
 		// destructor
 		~ShaderSimple();
@@ -176,3 +178,5 @@ namespace Trireme
 	
 	};
 }
+
+#endif

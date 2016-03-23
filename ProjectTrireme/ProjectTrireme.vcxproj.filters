@@ -44,9 +44,6 @@
     <ClCompile Include="Mesh.cpp">
       <Filter>Source Files\SceneObjects</Filter>
     </ClCompile>
-    <ClCompile Include="ObjectFbx.cpp">
-      <Filter>Source Files\SceneObjects</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="constdef.h">
@@ -71,9 +68,6 @@
       <Filter>Header Files\SceneObjects</Filter>
     </ClInclude>
     <ClInclude Include="Mesh.h">
-      <Filter>Header Files\SceneObjects</Filter>
-    </ClInclude>
-    <ClInclude Include="ObjectFbx.h">
       <Filter>Header Files\SceneObjects</Filter>
     </ClInclude>
   </ItemGroup>

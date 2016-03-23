@@ -1,7 +1,8 @@
 // constdef.h
 // this file is for defining constants used across the engine
 
-#pragma once
+#ifndef TRIREME_CONSTDEF_H
+#define TRIREME_CONSTDEF_H
 
 #define ERROR_MAX 256
 
@@ -26,3 +27,5 @@ namespace Trireme
 		static float* frameTime;
 	};
 }
+
+#endif

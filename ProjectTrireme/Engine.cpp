@@ -6,11 +6,13 @@ using std::fstream;
 using std::string;
 using std::cout;
 
-Engine::Engine() : Quit(false), frameTime(DEFAULT_FRAMETIME)
+Engine::Engine() : quit(false), frameTime(DEFAULT_FRAMETIME)
 {	
+	display = new Display();
+
 	GameProperties::frameTime = &frameTime;
-	GameProperties::windowWidth = m_display.getWidthAddress();
-	GameProperties::windowHeight = m_display.getHeightAddress();
+	GameProperties::windowWidth = display->getWidthAddress();
+	GameProperties::windowHeight = display->getHeightAddress();
 	
 	// clears error cache of SDL
 	SDL_ClearError();
@@ -32,7 +34,7 @@ Engine::Engine() : Quit(false), frameTime(DEFAULT_FRAMETIME)
 		defaultParamFile >> windowHeight;
 		defaultParamFile >> windowName;
 
-		m_display.init(windowWidth, windowHeight, windowName.c_str());
+		display->init(windowWidth, windowHeight, windowName.c_str());
 	}
 	else
 	{
@@ -40,7 +42,7 @@ Engine::Engine() : Quit(false), frameTime(DEFAULT_FRAMETIME)
 		defaultParamFile.open("engineParam.init", fstream::out);
 		defaultParamFile << "640 480 Game";
 
-		m_display.init(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, "Game");
+		display->init(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, "Game");
 	}
 
 	defaultParamFile.close();
@@ -49,32 +51,29 @@ Engine::Engine() : Quit(false), frameTime(DEFAULT_FRAMETIME)
 	shdrFnt->compile();
 	shdrFnt->bind();
 
-	scene = new Scene("Scenes/cube.fbx");
 	font = new Font("Fonts/Blockstepped.ttf", shdrFnt);
 }
 
 void Engine::update()
 {	
-	m_display.clear();
+	display->clear();
 
 	Uint32 frameStartTime = SDL_GetTicks();
 	
-	while (SDL_PollEvent(&m_event))
+	while (SDL_PollEvent(&sdl_event))
 	{
 		// checking if exit button was pressed
-		if (m_event.type == SDL_QUIT)
-			Quit = true;
+		if (sdl_event.type == SDL_QUIT)
+			quit = true;
 
 		// put input handlers here
 
-		m_display.input(m_event);
+		display->input(sdl_event);
 	}
 
-	font->render_text("The quick brown fox jumps over the lazy <>.", 0.f, 0.f, glm::vec3(1.f, 0.5f, 0.f)); // just for testing
+	// font->render_text("The quick brown fox jumps over the lazy <>.", 0.f, 0.f, glm::vec3(1.f, 0.5f, 0.f)); // just for testing
 
-	scene->drawScene();
-
-	m_display.update();
+	display->update();
 
 	Uint32 frameTime0 = SDL_GetTicks() - frameStartTime;
 
@@ -84,10 +83,17 @@ void Engine::update()
 	}
 }
 
+void Engine::run()
+{
+	while (!quit)
+		update();
+}
+
 Engine::~Engine()
 {
-	SDL_Quit();
 	delete shdrFnt;
 	delete font;
+	delete display;
+	SDL_Quit();
 	cout << "It's dead, Jim.\n";
 }

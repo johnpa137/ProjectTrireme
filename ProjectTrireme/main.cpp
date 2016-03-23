@@ -4,12 +4,9 @@ int main(int argc, char** argv)
 {	
 	std::cout << "It's Alive!\n";
 
-	{
-		Trireme::Engine engine;
+	Trireme::Engine engine;
 
-		while (!engine.Quit)
-			engine.update();
-	}
+	engine.run();
 	
 	return EXIT_SUCCESS;
 }

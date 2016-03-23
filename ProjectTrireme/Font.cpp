@@ -68,7 +68,7 @@ Font::Font(const char* filepath, ShaderFont* shader)
 			glm::ivec2(face->glyph->bitmap_left, face->glyph->bitmap_top),
 			face->glyph->advance.x
 		};
-		Characters.insert(std::pair<GLchar, Character>(c, character));
+		characters.insert(std::pair<GLchar, Character>(c, character));
 		short y_bearing = face->glyph->bitmap.rows - face->glyph->bitmap_top;
 		if (y_bearing > maxYBearing){
 			maxYBearing = y_bearing;
@@ -93,7 +93,7 @@ Font::Font(const char* filepath, ShaderFont* shader)
 	FT_Done_Face(face);
 }
 
-void Font::render_text(const char* text, float x, float y, const glm::vec3& color, const glm::vec2& scale)
+void Font::render_text(const char* text, float x, float y, const glm::vec3& color, const glm::vec2& scale)const
 {
 	shaderFont->bind();
 
@@ -103,13 +103,13 @@ void Font::render_text(const char* text, float x, float y, const glm::vec3& colo
 
 	for (const char* i = text; *i; ++i)
 	{
-		Character ch = Characters[*i];
+		Character ch = characters.at(*i);
 
-		float x2 = (x - (windowWidth / 2.f) + ch.Bearing.x) * (2.f / windowWidth);
-		float y2 = (y - (windowHeight / 2.f) - ((ch.Size.y - ch.Bearing.y - maxYBearing) * scale.y)) * (2.f / windowHeight);
+		float x2 = (x - (windowWidth / 2.f) + ch.bearing.x) * (2.f / windowWidth);
+		float y2 = (y - (windowHeight / 2.f) - ((ch.size.y - ch.bearing.y - maxYBearing) * scale.y)) * (2.f / windowHeight);
 
-		float w = ch.Size.x * (2.f / windowWidth) * scale.x;
-		float h = ch.Size.y * (2.f / windowHeight) * scale.y;
+		float w = ch.size.x * (2.f / windowWidth) * scale.x;
+		float h = ch.size.y * (2.f / windowHeight) * scale.y;
 
 		float box[4][4] = {
 			{ x2, y2 + h, 0.f, 0.f },
@@ -119,7 +119,7 @@ void Font::render_text(const char* text, float x, float y, const glm::vec3& colo
 		};
 
 		// Render glyph texture over quad
-		glBindTexture(GL_TEXTURE_2D, ch.TextureID);
+		glBindTexture(GL_TEXTURE_2D, ch.textureID);
 		// Update content of VBO memory
 		glBindBuffer(GL_ARRAY_BUFFER, vbo);
 		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(float) * 16, &box[0]);
@@ -129,7 +129,7 @@ void Font::render_text(const char* text, float x, float y, const glm::vec3& colo
 
 		glBindBuffer(GL_ARRAY_BUFFER, NULL);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x += (ch.Advance >> 6) * scale.x; // Bitshift by 6 to get value in pixels (2^6 = 64)
+		x += (ch.advance >> 6) * scale.x; // Bitshift by 6 to get value in pixels (2^6 = 64)
 	}
 
 	// unbinds the vao and texture
@@ -146,8 +146,8 @@ void Font::closeLib()
 Font::~Font()
 {
 	for (unsigned char c = 0; c < UCHAR_MAX; ++c)
-		glDeleteTextures(1, &Characters[c].TextureID);
-	Characters.clear();
+		glDeleteTextures(1, &characters[c].textureID);
+	characters.clear();
 	--fontCount;
 	if (!fontCount && libInit){
 		closeLib();

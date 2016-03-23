@@ -1,13 +1,13 @@
 // engine.h
 // file contains the declarations for functions concerning the starting of the engine, loading of game files, and updating the game and engine data
 
-#pragma once
+#ifndef TRIREME_ENGINE_H
+#define TRIREME_ENGINE_H
 
 #include <iostream>
 #include <fstream>
 #include "Display.h"
 #include "Font.h"
-#include "ObjectFbx.h"
 
 namespace Trireme
 {
@@ -20,20 +20,23 @@ namespace Trireme
 		// * sdl_geterror()
 		Engine();
 
-		// if set true program quits
-		bool Quit;
-
 		// updates the running components of the engine
 		void update();
+
+		// function for main
+		void run();
 
 		// deallocates memory of objects running in the engine
 		~Engine();
 	private:
-		Display m_display;
+		Display* display;
 		Font* font; // * just for testing
 		ShaderFont* shdrFnt; // * just for testing
-		Scene* scene;
-		SDL_Event m_event;
+		SDL_Event sdl_event; // event seems to show up as a keyword
 		float frameTime;
+		// if set true program quits
+		bool quit;
 	};
 }
+
+#endif

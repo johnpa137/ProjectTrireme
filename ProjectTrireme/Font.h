@@ -1,4 +1,5 @@
-#pragma once
+#ifndef TRIREME_FONT_H
+#define TRIREME_FONT_H
 
 #include "ft2build.h"
 #include FT_FREETYPE_H
@@ -14,10 +15,10 @@ namespace Trireme
 	// wrapper class for the texture informatio of a character
 	struct Character
 	{
-		GLuint TextureID; // ID handle of the glyph texture
-		glm::ivec2 Size; // Size of glyph
-		glm::ivec2 Bearing; // Offset from baseline to left/top of glyph
-		GLuint Advance; // Offset to advance to next glyph
+		GLuint textureID; // ID handle of the glyph texture
+		glm::ivec2 size; // Size of glyph
+		glm::ivec2 bearing; // Offset from baseline to left/top of glyph
+		GLuint advance; // Offset to advance to next glyph
 	};
 
 	// a wrapper class for fonts
@@ -36,7 +37,7 @@ namespace Trireme
 		// * y, y-coordinate of bottom left corner of text rectangle
 		// * color, color of text to be rendered
 		// * scale, how wide or tall the characters are relative to the default scale, 48
-		void render_text(const char* text, float x, float y, const glm::vec3& color, const glm::vec2& scale = glm::vec2(1.f, 1.f));
+		void render_text(const char* text, float x, float y, const glm::vec3& color, const glm::vec2& scale = glm::vec2(1.f, 1.f))const;
 
 		// closes Freetype library, call when done loading all fonts to deallocate freetype
 		void closeLib();
@@ -49,9 +50,11 @@ namespace Trireme
 		static FT_Library library; // the single freetype lib object for all fonts
 		short maxYBearing; // the greatest y_offset in the font set
 		// ushort windowWidth, windowHeight; // original width and height when text was first rendered
-		std::map<GLchar, Character> Characters;
+		std::map<GLchar, Character> characters;
 		GLuint vao, vbo;
 		ShaderFont* shaderFont;
 		const char* name;
 	};
 }
+
+#endif

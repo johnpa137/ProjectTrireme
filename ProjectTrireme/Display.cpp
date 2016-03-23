@@ -9,7 +9,7 @@ Display::Display()
 	m_context = NULL;
 }
 
-void Display::init(ushort screenWidth, ushort screenHeight, const char* windowName)
+void Display::init(const ushort screenWidth, const ushort screenHeight, const char* windowName)
 {
 	// display needs sdl's video subsystem, checks if it was enabled, sdl_wasinit returns a Uint32
 	if (SDL_WasInit(SDL_INIT_VIDEO) != SDL_INIT_VIDEO)
@@ -88,7 +88,7 @@ void Display::update()
 	SDL_GL_SwapWindow(m_window);
 }
 
-void Display::clear()const
+void Display::clear()
 {
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 }
@@ -98,7 +98,7 @@ void Display::input(SDL_Event& e)
 	if (e.type == SDL_WINDOWEVENT)
 		if (e.window.event == SDL_WINDOWEVENT_SIZE_CHANGED)
 		{
-			int x, y, w, h;
+			int w, h;
 			
 			SDL_GetWindowSize(m_window, &w, &h);
 
