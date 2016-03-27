@@ -47,11 +47,10 @@ Engine::Engine() : quit(false), frameTime(DEFAULT_FRAMETIME)
 
 	defaultParamFile.close();
 
-	shdrFnt = new ShaderFont();
-	shdrFnt->compile();
-	shdrFnt->bind();
+	fontShader = new FontShader();
+	fontShader->bind();
 
-	font = new Font("Fonts/Blockstepped.ttf", shdrFnt);
+	font = new Font("Fonts/Blockstepped.ttf", fontShader);
 }
 
 void Engine::update()
@@ -64,8 +63,11 @@ void Engine::update()
 	{
 		// checking if exit button was pressed
 		if (sdl_event.type == SDL_QUIT)
-			quit = true;
-
+		{
+			quit = true; 
+			return;
+		}
+			
 		// put input handlers here
 
 		display->input(sdl_event);
@@ -75,11 +77,14 @@ void Engine::update()
 
 	display->update();
 
-	Uint32 frameTime0 = SDL_GetTicks() - frameStartTime;
+	step(SDL_GetTicks() - frameStartTime);
+}
 
-	if (float(frameTime0) < frameTime)
+void Engine::step(const Uint32 frameLength)
+{
+	if (float(frameLength) < frameTime)
 	{
-		SDL_Delay(Uint32(frameTime - frameTime0));
+		SDL_Delay(Uint32(frameTime - frameLength));
 	}
 }
 
@@ -91,9 +96,12 @@ void Engine::run()
 
 Engine::~Engine()
 {
-	delete shdrFnt;
 	delete font;
+	font = nullptr;
+	delete fontShader;
+	fontShader = nullptr;
 	delete display;
+	display = nullptr;
 	SDL_Quit();
 	cout << "It's dead, Jim.\n";
 }

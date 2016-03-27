@@ -54,23 +54,23 @@ namespace Trireme
 		void setWindowName(const char* windowName);
 
 		// sets clear color
-		void setClearColor(const float r, const float g, const float b, const float a)const;
+		void setClearColor(const float r, const float g, const float b, const float a);
 
-		ushort* getWidthAddress() { return &m_width; }
-		ushort* getHeightAddress() { return &m_height; }
+		ushort* getWidthAddress() { return &width; }
+		ushort* getHeightAddress() { return &height; }
 
 		//destructor, destroys window and openGL context
 		~Display();
 
 	private:
 		// pointer to the window we're using
-		SDL_Window* m_window;
+		SDL_Window* window;
 		// the openGL context this program is using
-		SDL_GLContext m_context;
+		SDL_GLContext context;
 
 		// window dimensions
-		ushort m_width;
-		ushort m_height;
+		ushort width;
+		ushort height;
 	};
 }
 

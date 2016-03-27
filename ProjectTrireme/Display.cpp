@@ -5,8 +5,8 @@ using namespace Trireme;
 
 Display::Display()
 {
-	m_window = NULL;
-	m_context = NULL;
+	window = NULL;
+	context = NULL;
 }
 
 void Display::init(const ushort screenWidth, const ushort screenHeight, const char* windowName)
@@ -15,8 +15,8 @@ void Display::init(const ushort screenWidth, const ushort screenHeight, const ch
 	if (SDL_WasInit(SDL_INIT_VIDEO) != SDL_INIT_VIDEO)
 		throw "SDL_Video was not initialized for Display class.";
 
-	m_width = screenWidth;
-	m_height = screenHeight;
+	width = screenWidth;
+	height = screenHeight;
 
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 	SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, 4);
@@ -45,18 +45,18 @@ void Display::init(const ushort screenWidth, const ushort screenHeight, const ch
 	}
 
 	// creates a window that is able to be set with an openGL context
-	m_window = SDL_CreateWindow(windowName, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
+	window = SDL_CreateWindow(windowName, SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED,
 		screenWidth, screenHeight, SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE);
 
 	// checks if window was actually created
-	if (m_window == NULL)
+	if (window == NULL)
 		throw "Game window failed to be created.";
 
 	// creates an openGL context for the window, using the attributes we set earlier
-	m_context = SDL_GL_CreateContext(m_window);
+	context = SDL_GL_CreateContext(window);
 
 	// more error checking there's going to be a lot of that in the initial setup
-	if (m_context == NULL)
+	if (context == NULL)
 		throw "OpenGL context failed to be created.";
 
 	// initializes GLEW and checks if it initialized correctly
@@ -85,7 +85,7 @@ void Display::init(const ushort screenWidth, const ushort screenHeight, const ch
 
 void Display::update()
 {
-	SDL_GL_SwapWindow(m_window);
+	SDL_GL_SwapWindow(window);
 }
 
 void Display::clear()
@@ -100,10 +100,10 @@ void Display::input(SDL_Event& e)
 		{
 			int w, h;
 			
-			SDL_GetWindowSize(m_window, &w, &h);
+			SDL_GetWindowSize(window, &w, &h);
 
-			m_width = w;
-			m_height = h;
+			width = w;
+			height = h;
 
 			glViewport(0, 0, w, h);
 		}
@@ -111,32 +111,32 @@ void Display::input(SDL_Event& e)
 
 void Display::setFullScreen(Uint32 flag)
 {
-	if (SDL_SetWindowFullscreen(m_window, flag) != 0)
+	if (SDL_SetWindowFullscreen(window, flag) != 0)
 		throw "could not set fullscreen";
 }
 
 void Display::setWindowSize(const ushort width, const ushort height)
 {
-	SDL_SetWindowSize(m_window, width, height);
+	SDL_SetWindowSize(window, width, height);
 
-	m_width = width;
-	m_height = height;
+	this->width = width;
+	this->height = height;
 }
 
 void Display::setWindowName(const char* windowName)
 {
-	SDL_SetWindowTitle(m_window, windowName);
+	SDL_SetWindowTitle(window, windowName);
 }
 
-void Display::setClearColor(const float r, const float g, const float b, const float a)const
+void Display::setClearColor(const float r, const float g, const float b, const float a)
 {
 	glClearColor(r, g, b, a);
 }
 
 Display::~Display()
 {
-	SDL_GL_DeleteContext(m_context);
-	m_context = NULL;
-	SDL_DestroyWindow(m_window);
-	m_window = NULL;
+	SDL_GL_DeleteContext(context);
+	context = NULL;
+	SDL_DestroyWindow(window);
+	window = NULL;
 }

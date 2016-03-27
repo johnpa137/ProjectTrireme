@@ -20,9 +20,6 @@ namespace Trireme
 		// * sdl_geterror()
 		Engine();
 
-		// updates the running components of the engine
-		void update();
-
 		// function for main
 		void run();
 
@@ -31,11 +28,16 @@ namespace Trireme
 	private:
 		Display* display;
 		Font* font; // * just for testing
-		ShaderFont* shdrFnt; // * just for testing
+		FontShader* fontShader; // * just for testing
 		SDL_Event sdl_event; // event seems to show up as a keyword
 		float frameTime;
 		// if set true program quits
 		bool quit;
+
+		// updates the running components of the engine
+		void update();
+		// syncs framerate
+		void step(const Uint32 frameLength);
 	};
 }
 

@@ -15,15 +15,7 @@ namespace Trireme
 	class Shader
 	{
 	public:
-		enum Attribs
-		{
-			VERTEX,
-			ATTRIB_COUNT
-		};
-
 		Shader() {}
-		// compile shader program
-		virtual void compile() {}
 
 		// sets this as the program openGL is currently using
 		virtual void bind()const {}
@@ -42,140 +34,59 @@ namespace Trireme
 		// return false if no error and true if an error occured
 		// throws: 
 		// * glew errors when it fails to compile
-		void checkShaderError(GLuint shaderHandle, GLuint errorFlag, bool isProgram,
+		void checkShaderError(const GLuint shaderHandle, const GLuint errorFlag, const bool isProgram,
 			const std::string& errorMessage);
 
 		// links and validates the shader while checking for errors
 		// throws:
 		// * glew errors when it fails to link and validate
-		void linkAndValidateShader(GLuint shaderHandle);
+		void linkAndValidateShader(const GLuint shaderHandle);
 
 		// get shader source code from a file to a string
 		std::string getShaderSource(const char* filename);
-	};
 
-	// incomplete
-	class ShaderGUI : public Shader
-	{
-	public:
-		// attributes for the GUI shader
-		enum Attribs
-		{
-			HEIGHTANDWIDTH = Shader::Attribs::ATTRIB_COUNT,
-			//UV,
-			//UVDIMENSIONS,
-			ATTRIB_COUNT
-		};
-		
-		enum Uniforms
-		{
-			CAMERA_MATRIX,
-			UNIFORM_COUNT
-		};
-
-		enum ShaderType
-		{
-			VERTEX_SHADER,
-			GEOMETRY_SHADER,
-			FRAGMENT_SHADER,
-			SHADERTYPE_COUNT
-		};
-
-		// default contructor
-		ShaderGUI();
+		// attaches a shader component
+		void attachShader(const std::string& sourceStrings, const ushort componentHandle);
 
 		// compile shader program
-		// throws:
-		// * glew errors if it fails to compile, link, or validate the program
-		void compile();
-
-		// sets this as the program openGL is currently using
-		void bind()const;
-
-		// destructor
-		~ShaderGUI();
-
-		// array of GLuint uniforms
-		GLuint uniforms[UNIFORM_COUNT];
-	private:
-		GLuint m_components[SHADERTYPE_COUNT];
+		virtual void compile() {}
 	};
 
-	class ShaderFont : public Shader
+	// shader specifically for fonts, do not model custom shaders after this, actually make a seperate class for custom shaders
+	class FontShader : public Shader
 	{
 	public:
+		enum Attribs
+		{
+			VERTEX,
+			ATTRIB_COUNT
+		};
+
 		enum Uniforms
 		{
 			TEXT_COLOR,
 			UNIFORM_COUNT
 		};
 
-		enum ShaderType
+		FontShader();
+
+		void bind()const;
+
+		~FontShader();
+
+		// array of GLuint uniforms
+		GLuint uniforms[UNIFORM_COUNT];
+	protected:
+		enum Pipeline
 		{
 			VERTEX_SHADER,
 			FRAGMENT_SHADER,
 			SHADERTYPE_COUNT
 		};
 
-		ShaderFont();
+		GLuint components[SHADERTYPE_COUNT];
 
 		void compile();
-
-		void bind()const;
-
-		~ShaderFont();
-
-		// array of GLuint uniforms
-		GLuint uniforms[UNIFORM_COUNT];
-	private:
-		GLuint m_components[SHADERTYPE_COUNT];
-	};
-
-	// a lightless shader
-	class ShaderSimple : public Shader
-	{
-	public:
-		// attributes for the Simple shader
-		enum Attribs
-		{
-			UV = Shader::Attribs::ATTRIB_COUNT,
-			ATTRIB_COUNT
-		};
-	
-		enum Uniforms
-		{
-			CAMERA_MATRIX,
-			OBJECTPOSITION,
-			UNIFORM_COUNT
-		};
-	
-		enum ShaderType
-		{
-			VERTEX_SHADER,
-			FRAGMENT_SHADER,
-			SHADERTYPE_COUNT
-		};
-	
-		// default contructor
-		ShaderSimple();
-	
-		// compile shader program
-		// throws:
-		// * glew errors if it fails to compile, link, or validate the program
-		void compile();
-	
-		// sets this as the program openGL is currently using
-		void bind()const;
-	
-		// destructor
-		~ShaderSimple();
-	
-		GLint handle;
-		// array of GLuint uniforms
-		GLuint uniforms[UNIFORM_COUNT];
-	private:
-		GLuint m_components[SHADERTYPE_COUNT];
-	
 	};
 }
 

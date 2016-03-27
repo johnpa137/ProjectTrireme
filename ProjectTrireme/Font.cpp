@@ -11,7 +11,7 @@ ushort Font::fontCount = 0;
 #define windowWidth *GameProperties::windowWidth
 #define windowHeight *GameProperties::windowHeight
 
-Font::Font(const char* filepath, ShaderFont* shader)
+Font::Font(const char* filepath, FontShader* shader)
 {
 	if (!libInit)
 		if (FT_Init_FreeType(&library))
@@ -30,7 +30,7 @@ Font::Font(const char* filepath, ShaderFont* shader)
 	++fontCount;
 	maxYBearing = 0;
 
-	shaderFont = shader;
+	this->shader = shader;
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 
@@ -81,8 +81,8 @@ Font::Font(const char* filepath, ShaderFont* shader)
 	glBindVertexArray(vao);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 	glBufferData(GL_ARRAY_BUFFER, sizeof(GLfloat) * 4 * 4, NULL, GL_DYNAMIC_DRAW);
-	glEnableVertexAttribArray(Shader::Attribs::VERTEX);
-	glVertexAttribPointer(Shader::Attribs::VERTEX, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
+	glEnableVertexAttribArray(FontShader::Attribs::VERTEX);
+	glVertexAttribPointer(FontShader::Attribs::VERTEX, 4, GL_FLOAT, GL_FALSE, 4 * sizeof(GLfloat), 0);
 	glBindBuffer(GL_ARRAY_BUFFER, NULL);
 	glBindVertexArray(NULL);
 
@@ -95,9 +95,9 @@ Font::Font(const char* filepath, ShaderFont* shader)
 
 void Font::render_text(const char* text, float x, float y, const glm::vec3& color, const glm::vec2& scale)const
 {
-	shaderFont->bind();
+	shader->bind();
 
-	glUniform3fv(shaderFont->uniforms[ShaderFont::Uniforms::TEXT_COLOR], 1, &color[0]);
+	glUniform3fv(shader->uniforms[FontShader::Uniforms::TEXT_COLOR], 1, &color[0]);
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vao);
 

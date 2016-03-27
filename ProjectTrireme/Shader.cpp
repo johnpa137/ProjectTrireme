@@ -4,103 +4,46 @@ using namespace Trireme;
 
 using std::string;
 
-ShaderGUI::ShaderGUI()
+FontShader::FontShader()
 {
 	handle = glCreateProgram();
 
 	for (ushort i = 0; i < UNIFORM_COUNT; ++i)
 		uniforms[i] = NULL;
 
-	m_components[VERTEX_SHADER] = glCreateShader(GL_VERTEX_SHADER);
-	m_components[GEOMETRY_SHADER] = glCreateShader(GL_GEOMETRY_SHADER);
-	m_components[FRAGMENT_SHADER] = glCreateShader(GL_FRAGMENT_SHADER);
-
-	string shaderSources[SHADERTYPE_COUNT];
-
-	shaderSources[VERTEX_SHADER] = getShaderSource("Shaders/guiVertShader.glsl");
-	shaderSources[GEOMETRY_SHADER] = getShaderSource("Shaders/guiGeomShader.glsl");
-	shaderSources[FRAGMENT_SHADER] = getShaderSource("Shaders/guiFragShader.glsl");
-	
-	for (ushort i = 0; i < SHADERTYPE_COUNT; ++i)
-	{
-		const GLchar* shaderSourcesCStrings[1];
-		GLint sourceCharCounts[1];
-
-		shaderSourcesCStrings[0] = shaderSources[i].c_str();
-		sourceCharCounts[0] = shaderSources[i].length();
-
-		glShaderSource(m_components[i], 1, shaderSourcesCStrings, sourceCharCounts);
-
-		glCompileShader(m_components[i]);
-
-		// this can throw an error
-		checkShaderError(m_components[i], GL_COMPILE_STATUS, GL_FALSE, "Error: Shader Compilation Failed: ");
-
-		glAttachShader(handle, m_components[i]);
-	}
-}
-
-void ShaderGUI::compile()
-{
-	glBindAttribLocation(handle, VERTEX, "vertex");
-	glBindAttribLocation(handle, HEIGHTANDWIDTH, "heightAndWidth");
-	//glBindAttribLocation(handle, UV, "uv");
-	//glBindAttribLocation(handle, UVDIMENSIONS, "uvDim");
-
-	linkAndValidateShader(handle);
-}
-
-void ShaderGUI::bind()const
-{
-	glUseProgram(handle);
-}
-
-ShaderGUI::~ShaderGUI()
-{
-	for (ushort i = 0; i < SHADERTYPE_COUNT; ++i)
-	{
-		glDetachShader(handle, m_components[i]);
-		glDeleteShader(m_components[i]);
-	}
-
-	glDeleteProgram(handle);
-}
-
-ShaderFont::ShaderFont()
-{
-	handle = glCreateProgram();
-
-	for (ushort i = 0; i < UNIFORM_COUNT; ++i)
-		uniforms[i] = NULL;
-
-	m_components[VERTEX_SHADER] = glCreateShader(GL_VERTEX_SHADER);
-	m_components[FRAGMENT_SHADER] = glCreateShader(GL_FRAGMENT_SHADER);
+	components[VERTEX_SHADER] = glCreateShader(GL_VERTEX_SHADER);
+	components[FRAGMENT_SHADER] = glCreateShader(GL_FRAGMENT_SHADER);
 
 	string shaderSources[SHADERTYPE_COUNT];
 
 	shaderSources[VERTEX_SHADER] = getShaderSource("Shaders/fontVertShader.glsl");
 	shaderSources[FRAGMENT_SHADER] = getShaderSource("Shaders/fontFragShader.glsl");
 
-	for (ushort i = 0; i < SHADERTYPE_COUNT; ++i)
-	{
-		const GLchar* shaderSourcesCStrings[1];
-		GLint sourceCharCounts[1];
+	attachShader(shaderSources[VERTEX_SHADER], components[VERTEX_SHADER]);
+	attachShader(shaderSources[FRAGMENT_SHADER], components[FRAGMENT_SHADER]);
 
-		shaderSourcesCStrings[0] = shaderSources[i].c_str();
-		sourceCharCounts[0] = shaderSources[i].length();
-
-		glShaderSource(m_components[i], 1, shaderSourcesCStrings, sourceCharCounts);
-
-		glCompileShader(m_components[i]);
-
-		// this can throw an error
-		checkShaderError(m_components[i], GL_COMPILE_STATUS, GL_FALSE, "Error: Shader Compilation Failed: ");
-
-		glAttachShader(handle, m_components[i]);
-	}
+	compile();
 }
 
-void ShaderFont::compile()
+void Shader::attachShader(const std::string& sourceStrings, const ushort componentHandle)
+{
+	const GLchar* shaderSourcesCStrings[1];
+	GLint sourceCharCounts[1];
+
+	shaderSourcesCStrings[0] = sourceStrings.c_str();
+	sourceCharCounts[0] = sourceStrings.length();
+
+	glShaderSource(componentHandle, 1, shaderSourcesCStrings, sourceCharCounts);
+
+	glCompileShader(componentHandle);
+
+	// this can throw an error
+	checkShaderError(componentHandle, GL_COMPILE_STATUS, GL_FALSE, "Error: Shader Compilation Failed: ");
+
+	glAttachShader(handle, componentHandle);
+}
+
+void FontShader::compile()
 {
 	glBindAttribLocation(handle, VERTEX, "vertex");
 
@@ -109,84 +52,23 @@ void ShaderFont::compile()
 	uniforms[TEXT_COLOR] = glGetUniformLocation(handle, "text_color");
 }
 
-void ShaderFont::bind()const
+void FontShader::bind()const
 {
 	glUseProgram(handle);
 }
 
-ShaderFont::~ShaderFont()
+FontShader::~FontShader()
 {
 	for (ushort i = 0; i < SHADERTYPE_COUNT; ++i)
 	{
-		glDetachShader(handle, m_components[i]);
-		glDeleteShader(m_components[i]);
+		glDetachShader(handle, components[i]);
+		glDeleteShader(components[i]);
 	}
 
 	glDeleteProgram(handle);
 }
 
-ShaderSimple::ShaderSimple()
-{
-	handle = glCreateProgram();
-
-	for (ushort i = 0; i < UNIFORM_COUNT; ++i)
-		uniforms[i] = NULL;
-
-	m_components[VERTEX_SHADER] = glCreateShader(GL_VERTEX_SHADER);
-	m_components[FRAGMENT_SHADER] = glCreateShader(GL_FRAGMENT_SHADER);
-
-	string shaderSources[SHADERTYPE_COUNT];
-
-	shaderSources[VERTEX_SHADER] = getShaderSource("Shaders/simpVertShader.glsl");
-	shaderSources[FRAGMENT_SHADER] = getShaderSource("Shaders/simpFragShader.glsl");
-
-	for (ushort i = 0; i < SHADERTYPE_COUNT; ++i)
-	{
-		const GLchar* shaderSourcesCStrings[1];
-		GLint sourceCharCounts[1];
-
-		shaderSourcesCStrings[0] = shaderSources[i].c_str();
-		sourceCharCounts[0] = shaderSources[i].length();
-
-		glShaderSource(m_components[i], 1, shaderSourcesCStrings, sourceCharCounts);
-
-		glCompileShader(m_components[i]);
-
-		// this can throw an error
-		checkShaderError(m_components[i], GL_COMPILE_STATUS, GL_FALSE, "Error: Shader Compilation Failed: ");
-
-		glAttachShader(handle, m_components[i]);
-	}
-}
-
-void ShaderSimple::compile()
-{
-	glBindAttribLocation(handle, VERTEX, "vertex");
-	glBindAttribLocation(handle, UV, "uv");
-
-	linkAndValidateShader(handle);
-
-	uniforms[CAMERA_MATRIX] = glGetUniformLocation(handle, "camera_matrix");
-	uniforms[OBJECTPOSITION] = glGetUniformLocation(handle, "object_pos");
-}
-
-void ShaderSimple::bind()const
-{
-	glUseProgram(handle);
-}
-
-ShaderSimple::~ShaderSimple()
-{
-	for (ushort i = 0; i < SHADERTYPE_COUNT; ++i)
-	{
-		glDetachShader(handle, m_components[i]);
-		glDeleteShader(m_components[i]);
-	}
-
-	glDeleteProgram(handle);
-}
-
-void Shader::checkShaderError(GLuint shaderHandle, GLuint errorFlag, bool isProgram,
+void Shader::checkShaderError(const GLuint shaderHandle, const GLuint errorFlag, const bool isProgram,
 	const string& errorMessage)
 {
 	GLint success = 0;

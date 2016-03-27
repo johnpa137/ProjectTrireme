@@ -29,7 +29,7 @@ namespace Trireme
 		// parameters:
 		// * filepath to the font file
 		// * shader for the font
-		Font(const char* filepath, ShaderFont* shader);
+		Font(const char* filepath, FontShader* shader);
 
 		// renders text on the screen relative to the bottom left corner of the screen x is rightwards, y is upwards
 		// * text, array of characters to be rendered
@@ -52,7 +52,7 @@ namespace Trireme
 		// ushort windowWidth, windowHeight; // original width and height when text was first rendered
 		std::map<GLchar, Character> characters;
 		GLuint vao, vbo;
-		ShaderFont* shaderFont;
+		FontShader* shader;
 		const char* name;
 	};
 }
