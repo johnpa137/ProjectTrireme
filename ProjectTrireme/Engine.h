@@ -38,6 +38,8 @@ namespace Trireme
 		void update();
 		// syncs framerate
 		void step(const Uint32 frameLength);
+
+		void setup();
 	};
 }
 

@@ -25,16 +25,13 @@ namespace Trireme
 		// binds this texture to used for coloring the current mesh in memory
 		void bind()const;
 
-		// unbinds this texture from memory
-		void unbind()const;
-
 		// destructor
 		~Texture();
 
 	private:
 		// helper function for Texture class that obtains the pixel information in an SDL Surface,
 		// at specified index in the pixel array
-		Uint32 getPixel(SDL_Surface* surface, int x, int y)const;
+		uint32_t getPixel(SDL_Surface* surface, int x, int y)const;
 		// array of pixel components for the texture
 		// std::vector<unsigned char> pixels;
 		// handle of the texture in openGL

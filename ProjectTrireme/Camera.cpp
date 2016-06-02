@@ -4,9 +4,12 @@ using namespace Trireme;
 
 using glm::vec3;
 
-#define frameTime GameProperties::frameTime
-#define windowWidth GameProperties::windowWidth
-#define windowHeight GameProperties::windowHeight
+#define frameTime EngineProperties::frameTime
+#define windowWidth EngineProperties::windowWidth
+#define windowHeight EngineProperties::windowHeight
+#define DEFAULT_FIELD_OF_VIEW 70.f
+#define DEFAULT_Z_NEAR_CLIP 0.2f
+#define DEFAULT_Z_FAR_CLIP 750.f
 
 Camera::Camera()
 {

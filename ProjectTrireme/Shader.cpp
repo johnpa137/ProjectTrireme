@@ -1,31 +1,12 @@
 #include "Shader.h"
 
+#define ERROR_MAX 256
+
 using namespace Trireme;
 
 using std::string;
 
-FontShader::FontShader()
-{
-	handle = glCreateProgram();
-
-	for (ushort i = 0; i < UNIFORM_COUNT; ++i)
-		uniforms[i] = NULL;
-
-	components[VERTEX_SHADER] = glCreateShader(GL_VERTEX_SHADER);
-	components[FRAGMENT_SHADER] = glCreateShader(GL_FRAGMENT_SHADER);
-
-	string shaderSources[SHADERTYPE_COUNT];
-
-	shaderSources[VERTEX_SHADER] = getShaderSource("Shaders/fontVertShader.glsl");
-	shaderSources[FRAGMENT_SHADER] = getShaderSource("Shaders/fontFragShader.glsl");
-
-	attachShader(shaderSources[VERTEX_SHADER], components[VERTEX_SHADER]);
-	attachShader(shaderSources[FRAGMENT_SHADER], components[FRAGMENT_SHADER]);
-
-	compile();
-}
-
-void Shader::attachShader(const std::string& sourceStrings, const ushort componentHandle)
+void ShaderProgram::attachShader(const std::string& sourceStrings, const uint16_t componentHandle)
 {
 	const GLchar* shaderSourcesCStrings[1];
 	GLint sourceCharCounts[1];
@@ -43,32 +24,12 @@ void Shader::attachShader(const std::string& sourceStrings, const ushort compone
 	glAttachShader(handle, componentHandle);
 }
 
-void FontShader::compile()
-{
-	glBindAttribLocation(handle, VERTEX, "vertex");
-
-	linkAndValidateShader(handle);
-
-	uniforms[TEXT_COLOR] = glGetUniformLocation(handle, "text_color");
-}
-
-void FontShader::bind()const
+void ShaderProgram::bind()const
 {
 	glUseProgram(handle);
 }
 
-FontShader::~FontShader()
-{
-	for (ushort i = 0; i < SHADERTYPE_COUNT; ++i)
-	{
-		glDetachShader(handle, components[i]);
-		glDeleteShader(components[i]);
-	}
-
-	glDeleteProgram(handle);
-}
-
-void Shader::checkShaderError(const GLuint shaderHandle, const GLuint errorFlag, const bool isProgram,
+void ShaderProgram::checkShaderError(const GLuint shaderHandle, const GLuint errorFlag, const bool isProgram,
 	const string& errorMessage)
 {
 	GLint success = 0;
@@ -96,7 +57,7 @@ void Shader::checkShaderError(const GLuint shaderHandle, const GLuint errorFlag,
 	}
 }
 
-void Shader::linkAndValidateShader(GLuint shaderHandle)
+void ShaderProgram::linkAndValidateShader(GLuint shaderHandle)
 {
 	glLinkProgram(shaderHandle);
 	checkShaderError(shaderHandle, GL_LINK_STATUS, true, "Error: Program Linking Failed: ");
@@ -104,7 +65,7 @@ void Shader::linkAndValidateShader(GLuint shaderHandle)
 	checkShaderError(shaderHandle, GL_VALIDATE_STATUS, true, "Error: Program is Invalid: ");
 }
 
-string Shader::getShaderSource(const char* filename)
+string ShaderProgram::getShaderSource(const char* filename)
 {
 	std::ifstream file;
 

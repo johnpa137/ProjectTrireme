@@ -12,16 +12,16 @@
 namespace Trireme
 {
 	// an encapsulation class for a shader program handle 
-	class Shader
+	class ShaderProgram
 	{
 	public:
-		Shader() {}
+		ShaderProgram() {}
 
 		// sets this as the program openGL is currently using
-		virtual void bind()const {}
+		void bind()const;
 
 		// destructor
-		virtual ~Shader() {}
+		virtual ~ShaderProgram() {}
 
 	protected:
 		GLint handle;
@@ -43,51 +43,16 @@ namespace Trireme
 		void linkAndValidateShader(const GLuint shaderHandle);
 
 		// get shader source code from a file to a string
-		std::string getShaderSource(const char* filename);
+		static std::string getShaderSource(const char* filename);
 
 		// attaches a shader component
-		void attachShader(const std::string& sourceStrings, const ushort componentHandle);
+		void attachShader(const std::string& sourceStrings, const uint16_t componentHandle);
 
 		// compile shader program
 		virtual void compile() {}
 	};
 
-	// shader specifically for fonts, do not model custom shaders after this, actually make a seperate class for custom shaders
-	class FontShader : public Shader
-	{
-	public:
-		enum Attribs
-		{
-			VERTEX,
-			ATTRIB_COUNT
-		};
-
-		enum Uniforms
-		{
-			TEXT_COLOR,
-			UNIFORM_COUNT
-		};
-
-		FontShader();
-
-		void bind()const;
-
-		~FontShader();
-
-		// array of GLuint uniforms
-		GLuint uniforms[UNIFORM_COUNT];
-	protected:
-		enum Pipeline
-		{
-			VERTEX_SHADER,
-			FRAGMENT_SHADER,
-			SHADERTYPE_COUNT
-		};
-
-		GLuint components[SHADERTYPE_COUNT];
-
-		void compile();
-	};
+	
 }
 
 #endif

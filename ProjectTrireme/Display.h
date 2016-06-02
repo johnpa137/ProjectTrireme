@@ -27,7 +27,7 @@ namespace Trireme
 		// * A gl attribute failed to be set...
 		// * Game window failed to be created
 		// * OpenGL context failed to be created
-		void init(const ushort screenWidth, const ushort screenHeight, const char* windowName);
+		void init(const uint16_t screenWidth, const uint16_t screenHeight, const char* windowName);
 
 		// swaps frame buffers each frame to update screen
 		void update();
@@ -48,7 +48,7 @@ namespace Trireme
 		void setFullScreen(const Uint32 flag);
 
 		// sets window size to specified parameters
-		void setWindowSize(const ushort width, const ushort height);
+		void setWindowSize(const uint16_t width, const uint16_t height);
 
 		// sets the title that shows on the top bar of the window
 		void setWindowName(const char* windowName);
@@ -56,8 +56,8 @@ namespace Trireme
 		// sets clear color
 		void setClearColor(const float r, const float g, const float b, const float a);
 
-		ushort* getWidthAddress() { return &width; }
-		ushort* getHeightAddress() { return &height; }
+		uint16_t* getWidthAddress() { return &width; }
+		uint16_t* getHeightAddress() { return &height; }
 
 		//destructor, destroys window and openGL context
 		~Display();
@@ -69,8 +69,8 @@ namespace Trireme
 		SDL_GLContext context;
 
 		// window dimensions
-		ushort width;
-		ushort height;
+		uint16_t width;
+		uint16_t height;
 	};
 }
 

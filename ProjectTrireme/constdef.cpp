@@ -2,6 +2,6 @@
 
 using namespace Trireme;
 
-ushort * GameProperties::windowWidth = nullptr;
-ushort * GameProperties::windowHeight = nullptr;
-float * GameProperties::frameTime = nullptr;
+uint16_t * EngineProperties::windowWidth = nullptr;
+uint16_t * EngineProperties::windowHeight = nullptr;
+float * EngineProperties::frameTime = nullptr;

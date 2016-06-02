@@ -1,5 +1,15 @@
 #include "engine.h"
 
+#define DEFAULT_SCREEN_WIDTH 640
+
+#define DEFAULT_SCREEN_HEIGHT 480
+
+#define DEFAULT_FRAMETIME 1000.f / 60.f
+
+#define DEFAULT_FRAMERATE 60.f
+
+#define DEFAULT_WINDOW_TITLE "Trireme Engine"
+
 using namespace Trireme;
 
 using std::fstream;
@@ -10,9 +20,9 @@ Engine::Engine() : quit(false), frameTime(DEFAULT_FRAMETIME)
 {	
 	display = new Display();
 
-	GameProperties::frameTime = &frameTime;
-	GameProperties::windowWidth = display->getWidthAddress();
-	GameProperties::windowHeight = display->getHeightAddress();
+	EngineProperties::frameTime = &frameTime;
+	EngineProperties::windowWidth = display->getWidthAddress();
+	EngineProperties::windowHeight = display->getHeightAddress();
 	
 	// clears error cache of SDL
 	SDL_ClearError();
@@ -21,33 +31,15 @@ Engine::Engine() : quit(false), frameTime(DEFAULT_FRAMETIME)
 	if (SDL_Init(SDL_INIT_EVERYTHING) < NULL)
 		throw SDL_GetError();
 
-	fstream defaultParamFile;
+	setup();
+	try{
+		fontShader = new FontShader();
+	}
+	catch (std::string err)
+	{
+		cout << err;
+	}
 	
-	defaultParamFile.open("engineParam.init", fstream::in);
-
-	if (defaultParamFile.good())
-	{
-		ushort windowWidth, windowHeight;
-		string windowName;
-
-		defaultParamFile >> windowWidth;
-		defaultParamFile >> windowHeight;
-		defaultParamFile >> windowName;
-
-		display->init(windowWidth, windowHeight, windowName.c_str());
-	}
-	else
-	{
-		defaultParamFile.close();
-		defaultParamFile.open("engineParam.init", fstream::out);
-		defaultParamFile << "640 480 Game";
-
-		display->init(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, "Game");
-	}
-
-	defaultParamFile.close();
-
-	fontShader = new FontShader();
 	fontShader->bind();
 
 	font = new Font("Fonts/Blockstepped.ttf", fontShader);
@@ -69,11 +61,8 @@ void Engine::update()
 		}
 			
 		// put input handlers here
-
 		display->input(sdl_event);
 	}
-
-	// font->render_text("The quick brown fox jumps over the lazy <>.", 0.f, 0.f, glm::vec3(1.f, 0.5f, 0.f)); // just for testing
 
 	display->update();
 
@@ -86,6 +75,11 @@ void Engine::step(const Uint32 frameLength)
 	{
 		SDL_Delay(Uint32(frameTime - frameLength));
 	}
+}
+
+void Engine::setup()
+{
+	display->init(DEFAULT_SCREEN_WIDTH, DEFAULT_SCREEN_HEIGHT, DEFAULT_WINDOW_TITLE);
 }
 
 void Engine::run()
@@ -104,4 +98,5 @@ Engine::~Engine()
 	display = nullptr;
 	SDL_Quit();
 	cout << "It's dead, Jim.\n";
+	int i = 0;
 }

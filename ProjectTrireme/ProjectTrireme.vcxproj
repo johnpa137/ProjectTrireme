@@ -84,18 +84,30 @@
     <ClCompile Include="Display.cpp" />
     <ClCompile Include="Engine.cpp" />
     <ClCompile Include="Font.cpp" />
+    <ClCompile Include="FontShader.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Rects.cpp" />
+    <ClCompile Include="RectShader.cpp" />
     <ClCompile Include="Shader.cpp" />
     <ClCompile Include="Texture.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Button.h" />
     <ClInclude Include="Camera.h" />
+    <ClInclude Include="Checkbox.h" />
     <ClInclude Include="constdef.h" />
+    <ClInclude Include="Containers.h" />
     <ClInclude Include="Display.h" />
+    <ClInclude Include="Editbox.h" />
     <ClInclude Include="Engine.h" />
     <ClInclude Include="Font.h" />
+    <ClInclude Include="FontShader.h" />
+    <ClInclude Include="GUIManager.h" />
+    <ClInclude Include="Label.h" />
+    <ClInclude Include="Rects.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="RectShader.h" />
     <ClInclude Include="Shader.h" />
     <ClInclude Include="Texture.h" />
   </ItemGroup>
