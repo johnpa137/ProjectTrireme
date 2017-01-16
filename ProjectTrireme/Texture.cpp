@@ -27,14 +27,14 @@ void Texture::load(const char* textureFile)
 	int surfaceHeight = tempSurface->h;
 	int surfacePitch = tempSurface->pitch;
 
-	uint8_t * pixels = new uint8_t[pixelDataCount];
+	unsigned char * pixels = new unsigned char[pixelDataCount];
 	// pixels.resize(pixelDataCount, 0); // <- old version ^ new version
 	// iterates through each pixel
 	for (int y = 0; y < surfaceHeight; ++y)
 	{
 		for (int x = 0; x < surfaceWidth; ++x)
 		{
-			uint8_t r, g, b, a;
+			unsigned char r, g, b, a;
 
 			// gets the color information on the pixel and assigns them to the unsigned char values
 			SDL_GetRGBA(getPixel(tempSurface, x, y), tempSurface->format, &r, &g, &b, &a);
@@ -80,6 +80,12 @@ void Texture::bind()const
 	glBindTexture(GL_TEXTURE_2D, handle);
 }
 
+void Texture::unbind()const
+{
+	// unbinds this texture and binds a null texture
+	glBindTexture(GL_TEXTURE_2D, NULL);
+}
+
 Texture::~Texture()
 {
 	// deletes texture from openGL context
@@ -88,11 +94,11 @@ Texture::~Texture()
 	// pixels.clear();
 }
 
-uint32_t Texture::getPixel(SDL_Surface* surface, int x, int y)const
+Uint32 Texture::getPixel(SDL_Surface* surface, int x, int y)const
 {
 	int bpp = surface->format->BytesPerPixel;
 	// converts pixel data to a Uint8
-	uint8_t * pixel = (uint8_t *)surface->pixels + y * surface->pitch + x * bpp;
+	Uint8 * pixel = (Uint8 *)surface->pixels + y * surface->pitch + x * bpp;
 
 	// depending on image formate, each pixel can be made of a different number of components
 	switch (surface->format->BytesPerPixel) {
@@ -102,7 +108,7 @@ uint32_t Texture::getPixel(SDL_Surface* surface, int x, int y)const
 		break;
 	// 16-bit images
 	case 2:
-		return *(uint16_t *)pixel;
+		return *(Uint16 *)pixel;
 		break;
 	// 24-bit images
 	case 3:
@@ -113,7 +119,7 @@ uint32_t Texture::getPixel(SDL_Surface* surface, int x, int y)const
 		break;
 	// 32-bit image, should be default format of texture files, 32-bit pngs
 	case 4:
-		return *(uint32_t *)pixel;
+		return *(Uint32 *)pixel;
 		break;
 	// shouldn't happen, but avoids warnings
 	default:

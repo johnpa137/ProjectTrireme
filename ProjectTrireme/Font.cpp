@@ -6,11 +6,10 @@ using glm::vec4;
 
 FT_Library Font::library;
 bool Font::libInit = false;
-uint16_t Font::fontCount = 0;
+ushort Font::fontCount = 0;
 
-#define DEFAULT_FONT_SIZE 32
-#define windowWidth *EngineProperties::windowWidth
-#define windowHeight *EngineProperties::windowHeight
+#define windowWidth *GameProperties::windowWidth
+#define windowHeight *GameProperties::windowHeight
 
 Font::Font(const char* filepath, FontShader* shader)
 {
@@ -88,12 +87,13 @@ Font::Font(const char* filepath, FontShader* shader)
 	glBindVertexArray(NULL);
 
 	name = face->family_name;
+	// windowHeight = *GameProperties::windowHeight;
+	// windowWidth = *GameProperties::windowWidth;
 
 	FT_Done_Face(face);
 }
 
-// test function
-void Font::render_text(const char* text, const float x, const float y, const glm::vec3& color, const glm::vec2& scale)const
+void Font::render_text(const char* text, float x, float y, const glm::vec3& color, const glm::vec2& scale)const
 {
 	shader->bind();
 
@@ -101,13 +101,11 @@ void Font::render_text(const char* text, const float x, const float y, const glm
 	glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(vao);
 
-	float x1 = x;
-
 	for (const char* i = text; *i; ++i)
 	{
 		Character ch = characters.at(*i);
 
-		float x2 = (x1 - (windowWidth / 2.f) + ch.bearing.x) * (2.f / windowWidth);
+		float x2 = (x - (windowWidth / 2.f) + ch.bearing.x) * (2.f / windowWidth);
 		float y2 = (y - (windowHeight / 2.f) - ((ch.size.y - ch.bearing.y - maxYBearing) * scale.y)) * (2.f / windowHeight);
 
 		float w = ch.size.x * (2.f / windowWidth) * scale.x;
@@ -131,7 +129,7 @@ void Font::render_text(const char* text, const float x, const float y, const glm
 
 		glBindBuffer(GL_ARRAY_BUFFER, NULL);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		x1 += (ch.advance >> 6) * scale.x; // Bitshift by 6 to get value in pixels (2^6 = 64)
+		x += (ch.advance >> 6) * scale.x; // Bitshift by 6 to get value in pixels (2^6 = 64)
 	}
 
 	// unbinds the vao and texture

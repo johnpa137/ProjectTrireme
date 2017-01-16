@@ -9,7 +9,7 @@ Display::Display()
 	context = NULL;
 }
 
-void Display::init(const uint16_t screenWidth, const uint16_t screenHeight, const char* windowName)
+void Display::init(const ushort screenWidth, const ushort screenHeight, const char* windowName)
 {
 	// display needs sdl's video subsystem, checks if it was enabled, sdl_wasinit returns a Uint32
 	if (SDL_WasInit(SDL_INIT_VIDEO) != SDL_INIT_VIDEO)
@@ -115,7 +115,7 @@ void Display::setFullScreen(Uint32 flag)
 		throw "could not set fullscreen";
 }
 
-void Display::setWindowSize(const uint16_t width, const uint16_t height)
+void Display::setWindowSize(const ushort width, const ushort height)
 {
 	SDL_SetWindowSize(window, width, height);
 
